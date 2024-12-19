@@ -17,8 +17,26 @@ void sort(int* list, int len) {
 	}
 	
 }
+/* 冒泡排序（标志优化）*/
+void bubbleSortWithFlag(int nums[], int size) {
+    // 外循环：未排序区间为 [0, i]
+    for (int i = size - 1; i > 0; i--) {
+        bool flag = false;
+        // 内循环：将未排序区间 [0, i] 中的最大元素交换至该区间的最右端
+        for (int j = 0; j < i; j++) {
+            if (nums[j] > nums[j + 1]) {
+                int temp = nums[j];
+                nums[j] = nums[j + 1];
+                nums[j + 1] = temp;
+                flag = true;
+            }
+        }
+        if (!flag)
+            break;
+    }
+}
 
-void TestSort3() {
+void TestSort() {
 	int list[3] = {4, 1, 0};
 	sort(list, 3);
 	assert(list[0] == 0);
@@ -54,7 +72,7 @@ void TestSortWithSize(int n, int test_case_number) {
 }
 
 int main() {
-	TestSort3();
+	TestSort();
 	TestSortWithSize(10, 2);
 	TestSortWithSize(100, 3);
 	TestSortWithSize(1000, 4);
