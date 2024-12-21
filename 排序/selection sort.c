@@ -53,9 +53,30 @@ void Testcase2(){
 	
 }
 
+void Testcase3() {
+	srand(time(NULL));
+	int n = rand() % 1024;
+	if (n < 3) {
+		printf("It's too small!\n");
+		return;
+	}
+	int *nums1 = (int*)malloc(n * sizeof(int));
+	int *nums2 = (int*)malloc(n * sizeof(int));
+	for (int i = 0; i < n; i++) {
+		nums1[i] = rand();
+		nums2[i] = nums1[i];
+	}
+	qsort(nums1, n, sizeof(int), compare);
+	sort(nums2, n);
+	assert(match(nums1, nums2, n) == 1);
+	printf("Pass Testcase3!\n");
+	free(nums1);
+	free(nums2);
+}
+
 int main(){
 	Testcase1();
 	Testcase2();
-	
+	Testcase3();
 	return 0;
 }
