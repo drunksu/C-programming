@@ -7,7 +7,7 @@ int compare(const void *a, const void *b) {
 	return (*(int*)a) - (*(int*)b);
 }
 
-void sort(int* nums,int n){
+void sort1(int* nums,int n){
 	int max = 0;
 	for(int i = 0;i < n;i++ ){
 		max = max > nums[i] ? max : nums[i];
@@ -30,6 +30,43 @@ void sort(int* nums,int n){
 		}
 	}
 	
+	free(cnt);
+}
+
+void sort2(int* nums,int n){
+	int max = 0;
+	for(int i = 0;i < n;i++ ){
+		max = max > nums[i] ? max : nums[i];
+	}
+	
+	int* cnt = (int*)calloc(max + 1,sizeof(int));
+	if (cnt == NULL) {
+		printf("Memory allocation failed.\n");
+		return;
+	}
+	
+	for(int i = 0;i < n;i++){
+		cnt[nums[i]]++;
+	}
+	// 求 counter 的前缀和，将“出现次数”转换为“尾索引”
+	// 即 counter[num]-1 是 num 在 res 中最后一次出现的索引
+	for (int i = 0; i < max; i++) {
+		cnt[i + 1] += cnt[i];
+	}
+	
+	// 倒序遍历 nums ，将各元素填入结果数组 res
+	// 初始化数组 res 用于记录结果
+	int *res = (int*)malloc(sizeof(int) * n);
+	for (int i = n - 1; i >= 0; i--) {
+		int num = nums[i];
+		res[cnt[num] - 1] = num; // 将 num 放置到对应索引处
+		cnt[num]--;              // 令前缀和自减 1 ，得到下次放置 num 的索引
+	}
+	
+	// 使用结果数组 res 覆盖原数组 nums
+	memcpy(nums, res, n * sizeof(int));
+	// 释放内存
+	free(res);
 	free(cnt);
 }
 
